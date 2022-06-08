@@ -9,7 +9,7 @@ use cw2::set_contract_version;
 use cw20::{Cw20ExecuteMsg, Cw20ReceiveMsg};
 
 use crate::error::ContractError;
-use crate::msg::{Cw20HookMsg, ExecuteMsg, MigrateMsg, Recipient};
+use crate::msg::{Cw20HookMsg, ExecuteMsg, InstantiateMsg, MigrateMsg, Recipient};
 
 /// Contract name that is used for migration.
 const CONTRACT_NAME: &str = "nebula-airdrop";
@@ -17,9 +17,15 @@ const CONTRACT_NAME: &str = "nebula-airdrop";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn instantiate(deps: DepsMut) -> Result<Response, ContractError> {
+pub fn instantiate(
+    deps: DepsMut,
+    _env: Env,
+    _info: MessageInfo,
+    _msg: InstantiateMsg,
+) -> Result<Response, ContractError> {
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
-    Ok(Response::default())
+
+    Ok(Response::new())
 }
 
 /// ## Description
@@ -40,8 +46,10 @@ pub fn instantiate(deps: DepsMut) -> Result<Response, ContractError> {
 ///             recipients,
 ///         }** Distributes native tokenss.
 ///
+#[cfg_attr(not(feature = "library"), entry_point)]
 pub fn execute(
     deps: DepsMut,
+    _env: Env,
     info: MessageInfo,
     msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
@@ -53,6 +61,7 @@ pub fn execute(
         } => try_distribute_native(deps, info, denom, recipients),
     }
 }
+
 
 /// ## Description
 /// Receives CW20 tokens and executes a hook message.

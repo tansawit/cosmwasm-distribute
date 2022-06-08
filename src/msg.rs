@@ -1,7 +1,29 @@
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-use cosmwasm_std::Uint128;
+use cosmwasm_std::{Uint128};
 use cw20::Cw20ReceiveMsg;
+
+
+/// ## Description
+/// This structure stores the basic settings for creating a new contract.
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct InstantiateMsg {}
+
+/// ## Description
+/// This structure describes the execute messages of the contract.
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum ExecuteMsg {
+    /// Receive calls a hook message after receiving CW20 asset.
+    Receive(Cw20ReceiveMsg),
+    /// Distribute native SDK tokens
+    DistributeNative {
+        /// Coin denom to send
+        denom: String,
+        /// List of individual recipient addresses and amount
+        recipients: Vec<Recipient>,
+    },
+}
 
 /// ## Description
 /// This structure stores the recipient structure of the distribution
@@ -22,24 +44,8 @@ pub enum Cw20HookMsg {
         /// Address of CW20 token contract to send
         asset_token: String,
         /// List of individual recipient addresses and amount
-        recipients: Vec<Recipient>
+        recipients: Vec<Recipient>,
     },
-}
-
-/// ## Description
-/// This structure describes the execute messages of the contract.
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    /// Receive calls a hook message after receiving CW20 asset.
-    Receive(Cw20ReceiveMsg),
-    /// Distribute native SDK tokens
-    DistributeNative {
-        /// Coin denom to send
-        denom: String,
-        /// List of individual recipient addresses and amount
-        recipients: Vec<Recipient>
-    }
 }
 
 /// ## Description
@@ -47,3 +53,4 @@ pub enum ExecuteMsg {
 /// Currently take no arguments for migrations.
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct MigrateMsg {}
+

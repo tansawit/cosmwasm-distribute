@@ -1,9 +1,7 @@
 use cosmwasm_std::StdError;
 use thiserror::Error;
 
-/// ## Description
-/// This enum describes airdrop contract errors
-#[derive(Error, Debug, PartialEq)]
+#[derive(Error, Debug)]
 pub enum ContractError {
     #[error("{0}")]
     Std(#[from] StdError),
